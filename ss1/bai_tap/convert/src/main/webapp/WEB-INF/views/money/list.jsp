@@ -24,7 +24,7 @@
         <div class="row mb-3">
           <div class="col-md-4">
             <label class="form-label">Số tiền</label>
-            <input type="number" step="0.01" min="0" name="amount" class="form-control" required>
+            <input type="text" step="0.01" min="0" max="1000" name="amount" class="form-control" required>
           </div>
           <div class="col-md-4">
             <label class="form-label">Từ</label>
@@ -45,10 +45,11 @@
           <button class="btn btn-primary" type="submit">Chuyển đổi</button>
         </div>
       </form>
-
       <c:if test="${not empty result}">
-        <div class="alert alert-info mt-4 text-center">
-          <strong>Kết quả:</strong> ${result}
+        <div class="mt-4 text-center">
+          <div class="alert ${isError ? 'alert-danger' : 'alert-success'}">
+            <strong>Kết quả:</strong> ${result}
+          </div>
         </div>
       </c:if>
     </div>
