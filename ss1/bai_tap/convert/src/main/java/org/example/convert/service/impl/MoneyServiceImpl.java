@@ -8,8 +8,7 @@ public class MoneyServiceImpl {
         double amount;
         try {
             amount = Double.parseDouble(amountStr);
-        } catch (NumberFormatException e) {
-
+        } catch(NumberFormatException e) {
             return "Vui lòng nhập một số hợp lệ!";
         }
         double rate = 1.0;
