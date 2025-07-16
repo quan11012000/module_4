@@ -29,8 +29,14 @@ public class SanwichController {
 
     @PostMapping("/save")
     public String save(@RequestParam(value = "condiment", required = false) String[] condiments, Model model) {
-        List<String> selected = condiments != null ? Arrays.asList(condiments) : new ArrayList<>();
+        if (condiments == null || condiments.length == 0) {
+            model.addAttribute("error", "Bạn phải chọn ít nhất một gia vị!");
+            model.addAttribute("condiments", sandwichService.getAvailableCondiments()); // nạp lại form
+            return "index";
+        }
+        List<String> selected = Arrays.asList(condiments);
         model.addAttribute("selectedCondiments", selected);
         return "sandwich";
     }
+
 }

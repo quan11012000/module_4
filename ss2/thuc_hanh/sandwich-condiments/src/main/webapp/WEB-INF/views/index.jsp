@@ -14,5 +14,9 @@
   <br>
   <input type="submit" value="Save">
 </form>
+<c:if test="${not empty error}">
+  <p style="color:red">${error}</p>
+</c:if>
+
 </body>
 </html>
