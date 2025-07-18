@@ -1,20 +1,34 @@
 package org.example.productmanagementthymeleaf.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "products")
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false, length = 255)
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     private double price;
 
+    // Constructors
     public Product() {
     }
 
-    public Product(int id, String name, String description, double price) {
-        this.id = id;
+    public Product(String name, String description, double price) {
         this.name = name;
         this.description = description;
         this.price = price;
     }
+
+    // Getters & Setters
 
     public int getId() {
         return id;

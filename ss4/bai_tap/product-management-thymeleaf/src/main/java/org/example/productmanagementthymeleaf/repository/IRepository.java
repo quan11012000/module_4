@@ -10,5 +10,5 @@ public interface IRepository<T> {
 
     void update(int id, T t);
 
-    void remove(int id);
+    boolean remove(int id);
 }

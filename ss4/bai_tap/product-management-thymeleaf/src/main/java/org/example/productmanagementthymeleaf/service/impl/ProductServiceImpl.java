@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 public class ProductServiceImpl implements IProductService {
-    private IProductRepository productRepository = new ProductRepositoryImpl();
+    @Autowired IProductRepository productRepository;
     @Override
     public List<Product> finAll() {
         return productRepository.finAll();
@@ -36,8 +36,8 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public void remove(int id) {
-        productRepository.remove(id);
+    public boolean remove(int id) {
+        return productRepository.remove(id);
     }
 
     @Override
