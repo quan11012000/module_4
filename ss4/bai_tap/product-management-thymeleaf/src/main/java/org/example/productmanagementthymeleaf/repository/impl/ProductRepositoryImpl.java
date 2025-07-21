@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 @Repository
 public class ProductRepositoryImpl implements IProductRepository {
-
-
     @Override
     public List<Product> finAll() {
         return BaseRepository.entityManager.createQuery("select p from Product p", Product.class).getResultList();

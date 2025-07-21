@@ -1,0 +1,26 @@
+<!-- templates/blog/create.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+    <title>Viết bài mới</title>
+</head>
+<body>
+<header th:replace="layout :: header"></header>
+<main class="container">
+    <h2>Viết bài mới</h2>
+    <form th:action="@{/blogs/save}" method="post" th:object="${blog}">
+        <div class="mb-3">
+            <label>Tiêu đề:</label>
+            <input type="text" class="form-control" th:field="*{title}" required>
+        </div>
+        <div class="mb-3">
+            <label>Nội dung:</label>
+            <textarea class="form-control" th:field="*{content}" rows="6" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Đăng bài</button>
+        <a th:href="@{/blogs}" class="btn btn-secondary">Huỷ</a>
+    </form>
+</main>
+<footer th:replace="layout :: footer"></footer>
+</body>
+</html>
