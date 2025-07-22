@@ -28,12 +28,35 @@
 </div>
 <header th:replace="layout :: header"></header>
 <main class="container">
+    <form class="form-inline mb-3 " th:action="@{/blogs/search}" method="get">
+        <div class="mb-3">
+            <div class="btn-group" role="group" aria-label="Filter by Category">
+                <a th:href="@{/blogs}" class="btn btn-outline-secondary"
+                   th:classappend="${selectedCategoryId} == null ? 'active'">
+                    Tất cả
+                </a>
+                <a th:each="category : ${categoryList}"
+                   th:href="@{/blogs/category/{id}(id=${category.idType})}"
+                   class="btn btn-outline-secondary"
+                   th:text="${category.nameType}"
+                   th:classappend="${selectedCategoryId} == category.idType ? 'active'">
+                </a>
+            </div>
+        </div>
+        <div class="input-group w-50">
+                <input type="text" class="form-control" name="keyword" placeholder="Search by name..." th:value="${keyword}">
+                <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col" th:each="blog : ${blogs}">
             <div class="card bg-dark text-white">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${blog.title}">Tiêu đề</h5>
+
+                    <small class="" th:text="${#temporals.format(blog.createdAt, 'dd/MM/yyyy HH:mm')}">22/07/2025 09:30</small>
                     <p class="card-text" th:text="${#strings.abbreviate(blog.content, 100)}">Nội dung...</p>
+                    <p th:text="${blog.category.nameType}"></p>
                     <div class="d-flex justify-content-end gap-2">
                         <a class="btn btn-info btn-sm" th:href="@{/blogs/{id}(id=${blog.id})}">Xem</a>
                         <a class="btn btn-warning btn-sm" th:href="@{/blogs/{id}/edit(id=${blog.id})}">Sửa</a>
@@ -49,6 +72,31 @@
         </div>
     </div>
 </main>
+<nav aria-label="Pagination" class="mt-4">
+    <ul class="pagination justify-content-center">
+        <!-- Nút Previous -->
+        <li class="page-item" th:classappend="${!blogs.hasPrevious()} ? 'disabled'">
+            <a class="page-link" th:href="@{/blogs(page=${blogs.number - 1})}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <!-- Các số trang -->
+        <li class="page-item"
+            th:each="i : ${#numbers.sequence(0, blogs.totalPages - 1)}"
+            th:classappend="${i == blogs.number} ? 'active'">
+            <a class="page-link" th:href="@{/blogs(page=${i})}" th:text="${i + 1}">1</a>
+        </li>
+
+        <!-- Nút Next -->
+        <li class="page-item" th:classappend="${!blogs.hasNext()} ? 'disabled'">
+            <a class="page-link" th:href="@{/blogs(page=${blogs.number + 1})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
 <footer th:replace="layout :: footer"></footer>
 
 <!-- Delete Modal -->

@@ -3,13 +3,15 @@ package org.example.blogsp.service;
 import org.example.blogsp.entity.Blog;
 import org.example.blogsp.repository.IBlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class BlogService implements IBlogService{
     @Autowired
-    IBlogRepository blogRepository;
+    private IBlogRepository blogRepository;
     @Override
     public List<Blog> findAll() {
         return blogRepository.findAll();
@@ -38,6 +40,26 @@ public class BlogService implements IBlogService{
         }
         return false;
     }
+    @Override
+    public Page<Blog> findAll(Pageable pageable) {
+        return blogRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Blog> searchByName(String name, Pageable pageable) {
+        return blogRepository.searchByTitle(name, pageable);
+    }
+
+    @Override
+    public Page<Blog> findByTitleContainingAndCategory_IdType(String keyword, Integer idType, Pageable pageable) {
+        return blogRepository.findByTitleContainingAndCategory_IdType(keyword, idType, pageable);
+    }
+
+    @Override
+    public Page<Blog> findByCategory_IdType(Integer idType, Pageable pageable) {
+        return blogRepository.findByCategory_IdType(idType, pageable);
+    }
+
 
     @Override
     public Boolean deleteById(Integer id) {

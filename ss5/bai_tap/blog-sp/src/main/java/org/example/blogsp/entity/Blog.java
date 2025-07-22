@@ -11,13 +11,17 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Blog {
+public class Blog extends Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String title;
-@Column(columnDefinition = "TEXT")
-    private String content;
-private LocalDate createdAt;
 
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id_type")
+    private Category category;
 }
