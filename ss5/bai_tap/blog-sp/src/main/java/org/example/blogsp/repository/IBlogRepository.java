@@ -14,9 +14,10 @@ import java.util.List;
 
 @Repository
 public interface IBlogRepository extends JpaRepository<Blog,Integer> {
-    @Query("SELECT b FROM Blog b WHERE b.title LIKE CONCAT('%', :title, '%')")
-    Page<Blog> searchByTitle(@Param("title") String title, Pageable pageable);
+        @Query("SELECT b FROM Blog b WHERE b.title LIKE CONCAT('%', :title, '%')")
+        Page<Blog> searchByTitle(@Param("title") String title, Pageable pageable);
     Page<Blog> findByTitleContainingAndCategory_IdType(String keyword, Integer idType, Pageable pageable);
     Page<Blog> findByCategory_IdType(Integer idType, Pageable pageable);
-
+    @Query ("SELECT b FROM Blog b WHERE b.title LIKE CONCAT('%', :keyword, '%') and (b.category.idType = :categoryId or 0 = :categoryId)")
+    Page<Blog> filter(@Param("keyword") String keyword,@Param("categoryId") Integer categoryId, Pageable pageable);
 }

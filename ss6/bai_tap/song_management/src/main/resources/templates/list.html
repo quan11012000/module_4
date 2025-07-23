@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Danh sách bài hát</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:if="${message}" class="position-fixed top-0 start-50 translate-middle-x p-3 z-3">
+  <div id="successToast" class="toast align-items-center text-bg-success border-0"
+       role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+    <div class="d-flex">
+      <div class="toast-body" th:text="${message}">Cập nhật thành công</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+<div th:if="${error}" class="position-fixed top-0 start-50 translate-middle-x p-3 z-3">
+  <div id="errorToast" class="toast align-items-center text-bg-danger border-0"
+       role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+    <div class="d-flex">
+      <div class="toast-body" th:text="${error}">Cập nhật thất bại</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold">🎵 Danh sách bài hát</h2>
+    <a class="btn btn-primary" th:href="@{/songs/create}">➕ Thêm bài hát</a>
+  </div>
+
+  <div class="card shadow-sm rounded-4">
+    <div class="card-body p-0">
+      <table class="table table-hover table-bordered mb-0">
+        <thead class="table-light">
+        <tr>
+          <th scope="col">Tên bài hát</th>
+          <th scope="col">Nghệ sĩ</th>
+          <th scope="col">Thể loại</th>
+          <th scope="col" style="width: 120px">Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="song : ${songs}">
+          <td th:text="${song.name}"></td>
+          <td th:text="${song.artist}"></td>
+          <td th:text="${song.genre}"></td>
+          <td>
+            <a class="btn btn-sm btn-outline-warning" th:href="@{'/songs/' + ${song.id} + '/edit'}">✏️ Sửa</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const showToast = (id) => {
+      const toastEl = document.getElementById(id);
+      if (!toastEl) return;
+      const toast = bootstrap.Toast.getOrCreateInstance(toastEl);
+      toast.show();
+    };
+    showToast('successToast');
+    showToast('errorToast');
+    const deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget;
+      const blogId = button.getAttribute('data-id');
+      const blogTitle = button.getAttribute('data-title');
+      document.getElementById('modalBlogTitle').textContent = blogTitle;
+      document.getElementById('deleteForm').setAttribute('action', '/blogs/' + blogId + '/delete');
+    });
+  });
+</script>
+</body>
+</html>

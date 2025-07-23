@@ -6,6 +6,7 @@ import org.example.blogsp.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,19 +23,26 @@ public class BlogController {
     @Autowired
     private CategoryService categoryService;
     @GetMapping
-    public String displayAll(Model model, @RequestParam(name = "page", defaultValue = "0") int page) {
+    public String displayAll(Model model, @RequestParam(name = "page", defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "desc") String sort,
+                             @RequestParam(required = false) String keyword,
+                             @RequestParam(required = false) Integer categoryId) {
         int size = 6;
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        model.addAttribute("blogs", blogService.findAll(pageRequest));
+        Sort sortOption = sort.equals("desc")?Sort.by("createdAt").descending():Sort.by("createdAt").ascending();
+        Pageable pageable = PageRequest.of(page, size, sortOption);
+        if (categoryId == null) {
+            categoryId = 0;
+        }
+        if (keyword == null) {
+            keyword = "";
+        }
+        model.addAttribute("blogs", blogService.filter(keyword,categoryId,pageable));
         model.addAttribute("categoryList", categoryService.findAll());
+        model.addAttribute("sort", sort);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("categoryId", categoryId);
         return "list";
     }
-//    @GetMapping
-//    public String list(Model model) {
-//        model.addAttribute("blogs", blogService.findAll());
-//        return "list";
-//    }
-
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("blog", new Blog());
@@ -90,46 +98,6 @@ public class BlogController {
         }
         return "detail";
     }
-    @GetMapping("/search")
-    public String search(@RequestParam String keyword,
-                         @RequestParam(required = false) Integer categoryId,
-                         @RequestParam(defaultValue = "0") int page,
-                         Model model,RedirectAttributes redirectAttributes) {
 
-        int size = 6;
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-
-        Page<Blog> blogs;
-        if (categoryId != null && categoryId != 0) {
-            blogs = blogService.findByTitleContainingAndCategory_IdType(keyword, categoryId, pageable);
-        } else {
-            blogs = blogService.searchByName(keyword, pageable);
-        }
-
-        if (blogs.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Không tìm thấy blog");
-            return "redirect:/blogs";
-        }
-
-        model.addAttribute("blogs", blogs);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("selectedCategoryId", categoryId);
-        model.addAttribute("categoryList", categoryService.findAll());
-        return "list";
-    }
-    @GetMapping("/category/{idType}")
-    public String filterByCategory(@PathVariable("idType") Integer idType,
-                                   @RequestParam(name="page", defaultValue = "0") int page,
-                                   Model model) {
-        int size = 6;
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
-
-        Page<Blog> blogs = blogService.findByCategory_IdType(idType, pageRequest);
-
-        model.addAttribute("blogs", blogs);
-        model.addAttribute("categoryList", categoryService.findAll());
-        model.addAttribute("selectedCategoryId", idType); // Dùng để active button
-        return "list";
-    }
 
 }

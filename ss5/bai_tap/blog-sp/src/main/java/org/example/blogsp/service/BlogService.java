@@ -60,6 +60,11 @@ public class BlogService implements IBlogService{
         return blogRepository.findByCategory_IdType(idType, pageable);
     }
 
+    @Override
+    public Page<Blog> filter(String keyword, Integer categoryId, Pageable pageable) {
+        return blogRepository.filter(keyword, categoryId, pageable);
+    }
+
 
     @Override
     public Boolean deleteById(Integer id) {

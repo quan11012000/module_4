@@ -1,4 +1,4 @@
-//package org.example.blogsp.controller;
+package org.example.form_dang_ky.controller;//package org.example.blogsp.controller;
 //
 //import jakarta.servlet.RequestDispatcher;
 //import jakarta.servlet.http.HttpServletRequest;

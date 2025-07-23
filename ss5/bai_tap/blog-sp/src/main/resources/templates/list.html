@@ -28,25 +28,27 @@
 </div>
 <header th:replace="layout :: header"></header>
 <main class="container">
-    <form class="form-inline mb-3 " th:action="@{/blogs/search}" method="get">
-        <div class="mb-3">
-            <div class="btn-group" role="group" aria-label="Filter by Category">
-                <a th:href="@{/blogs}" class="btn btn-outline-secondary"
-                   th:classappend="${selectedCategoryId} == null ? 'active'">
-                    Tất cả
-                </a>
-                <a th:each="category : ${categoryList}"
-                   th:href="@{/blogs/category/{id}(id=${category.idType})}"
-                   class="btn btn-outline-secondary"
-                   th:text="${category.nameType}"
-                   th:classappend="${selectedCategoryId} == category.idType ? 'active'">
-                </a>
-            </div>
-        </div>
-        <div class="input-group w-50">
+    <form class="row mb-3 " th:action="@{/blogs}" method="get">
+        <div class="col-md-3">
                 <input type="text" class="form-control" name="keyword" placeholder="Search by name..." th:value="${keyword}">
-                <button class="btn btn-primary" type="submit">Search</button>
         </div>
+        <div class="col-md-3">
+            <select class="form-select" name="categoryId" onchange="this.form.submit()" >
+                <option value="" th:selected="${categoryId == null}">Tất cả danh mục</option>
+                <option th:each="temp : ${categoryList}" th:text="${temp.nameType}" th:value="${temp.idType} " th:selected="${categoryId == temp.idType}"></option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" name="sort" onchange="this.form.submit()" >
+                <option value="desc" th:selected="${sort == null or sort == 'desc'}">Mới nhất</option>
+                <option value="asc" th:selected="${sort == 'asc'}">Cũ nhất</option>
+
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+
     </form>
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col" th:each="blog : ${blogs}">
@@ -76,7 +78,7 @@
     <ul class="pagination justify-content-center">
         <!-- Nút Previous -->
         <li class="page-item" th:classappend="${!blogs.hasPrevious()} ? 'disabled'">
-            <a class="page-link" th:href="@{/blogs(page=${blogs.number - 1})}" aria-label="Previous">
+            <a class="page-link" th:href="@{/blogs(page=${blogs.number - 1},keyword=${keyword},categoryId=${categoryId},sort=${sort})}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
@@ -85,12 +87,12 @@
         <li class="page-item"
             th:each="i : ${#numbers.sequence(0, blogs.totalPages - 1)}"
             th:classappend="${i == blogs.number} ? 'active'">
-            <a class="page-link" th:href="@{/blogs(page=${i})}" th:text="${i + 1}">1</a>
+            <a class="page-link" th:href="@{/blogs(page=${i},keyword=${keyword},categoryId=${categoryId},sort=${sort}) }" th:text="${i + 1}">1</a>
         </li>
 
         <!-- Nút Next -->
         <li class="page-item" th:classappend="${!blogs.hasNext()} ? 'disabled'">
-            <a class="page-link" th:href="@{/blogs(page=${blogs.number + 1})}" aria-label="Next">
+            <a class="page-link" th:href="@{/blogs(page=${blogs.number + 1},keyword=${keyword},categoryId=${categoryId},sort=${sort})}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
