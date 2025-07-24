@@ -13,7 +13,6 @@ import lombok.Setter;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
-
         private String name;
         private String artist;
         private String genre;

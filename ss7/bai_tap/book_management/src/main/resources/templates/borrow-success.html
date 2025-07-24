@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="layout :: layout(~{::section})">
+<section>
+    <div class="alert alert-success">
+        <h4 class="alert-heading">🎉 Bạn đã mượn sách thành công!</h4>
+        <p>Mã mượn sách của bạn là: <strong th:text="${code}"></strong></p>
+    </div>
+    <a href="/books" class="btn btn-primary">Về danh sách sách</a>
+</section>
+</html>

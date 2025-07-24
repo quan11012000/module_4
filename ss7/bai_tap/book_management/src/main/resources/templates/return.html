@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="layout :: layout(~{::section})">
+<section>
+    <h3>📥 Trả sách</h3>
+    <form method="post" class="mt-3">
+        <div class="mb-3">
+            <label for="code" class="form-label">Nhập mã mượn:</label>
+            <input type="text" name="code" id="code" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Trả sách</button>
+        <a href="/books" class="btn btn-secondary">Huỷ</a>
+    </form>
+</section>
+</html>
