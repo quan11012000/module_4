@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Thanh toán cho Order #<span th:text="${order.id}"></span></h2>
+<form th:action="@{/orders/checkout}" method="post" th:object="${payment}">
+  <input type="hidden" th:value="${order.invoice.id}" th:field="*{invoice.id}" />
+  <label>Phương thức thanh toán:</label>
+  <select th:field="*{method}">
+    <option th:each="pm : ${paymentMethods}" th:value="${pm}" th:text="${pm}"></option>
+  </select>
+  <label>Số tiền:</label>
+  <input type="text" th:field="*{amount}" class="form-control" th:value="${order.invoice.totalAmount}" readonly />
+  <button type="submit" class="btn btn-primary mt-2">Xác nhận</button>
+</form>
+
+</body>
+</html>

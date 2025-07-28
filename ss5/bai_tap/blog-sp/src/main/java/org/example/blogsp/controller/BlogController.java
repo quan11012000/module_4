@@ -84,7 +84,6 @@ public class BlogController {
             redirectAttributes.addFlashAttribute("message", "Xoá thành công");
         }else{
             redirectAttributes.addFlashAttribute("error", "Không tìm thấy Blog");
-
         }
         return "redirect:/blogs";
     }

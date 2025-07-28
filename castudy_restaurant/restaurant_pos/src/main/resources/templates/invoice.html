@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Hóa đơn #<span th:text="${invoice.id}"></span></h2>
+<p><strong>Bàn:</strong> <span th:text="${invoice.order.tableId}"></span></p>
+<p><strong>Tổng tiền:</strong> <span th:text="${invoice.totalAmount}"></span> VND</p>
+<p><strong>Phương thức:</strong> <span th:text="${invoice.payment.method}"></span></p>
+<p><strong>Thời gian:</strong> <span th:text="${#temporals.format(invoice.payment.paymentTime, 'dd/MM/yyyy HH:mm')}"></span></p>
+<button onclick="window.print()" class="btn btn-secondary">In hóa đơn</button>
+
+</body>
+</html>
