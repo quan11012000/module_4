@@ -1,0 +1,17 @@
+<!-- templates/blog/detail.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+    <title>Chi tiết bài viết</title>
+</head>
+<body>
+<header th:replace="layout :: header"></header>
+<main class="container">
+    <h2 th:text="${blog.title}">Tiêu đề</h2>
+    <p><strong>Danh mục:</strong> <span th:text="${blog.category.nameType}">Tên danh mục</span></p>
+    <p th:text="${blog.content}">Nội dung</p>
+    <a th:href="@{/blogs}" class="btn btn-secondary">Quay lại</a>
+</main>
+<footer th:replace="layout :: footer"></footer>
+</body>
+</html>

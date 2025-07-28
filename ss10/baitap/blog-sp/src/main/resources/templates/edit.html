@@ -1,0 +1,34 @@
+<!-- templates/blog/edit.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+    <title>Cập nhật bài viết</title>
+</head>
+<body>
+<header th:replace="layout :: header"></header>
+<main class="container">
+    <h2>Cập nhật bài viết</h2>
+    <form th:action="@{/blogs/edit}" method="post" th:object="${blog}">
+        <input type="hidden" th:field="*{id}">
+        <div class="mb-3">
+            <label>Tiêu đề:</label>
+            <input type="text" class="form-control" th:field="*{title}" required>
+        </div>
+        <div class="mb-3">
+            <label>Nội dung:</label>
+            <textarea class="form-control" th:field="*{content}" rows="6" required></textarea>
+        </div>
+        <select class="form-select" th:field="*{category}" required>
+            <option value="" disabled>-- Chọn danh mục --</option>
+            <option th:each="temp : ${categoryList}"
+                    th:value="${temp.idType}"
+                    th:text="${temp.nameType}">
+            </option>
+        </select>
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <a th:href="@{/blogs}" class="btn btn-secondary">Huỷ</a>
+    </form>
+</main>
+<footer th:replace="layout :: footer"></footer>
+</body>
+</html>
