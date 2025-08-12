@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách heo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .search-add-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<!-- Toast Success -->
+<div th:if="${message}" class="position-fixed top-0 start-50 translate-middle-x p-3 z-3">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+         aria-atomic="true" data-bs-delay="3000">
+        <div class="d-flex">
+            <div class="toast-body" th:text="${message}">Cập nhật thành công</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Error -->
+<div th:if="${error}" class="position-fixed top-0 start-50 translate-middle-x p-3 z-3">
+    <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
+         aria-atomic="true" data-bs-delay="3000">
+        <div class="d-flex">
+            <div class="toast-body" th:text="${error}">Cập nhật thất bại</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <h3 class="mb-3 text-primary fw-bold">🐷 Danh sách heo</h3>
+
+    <!-- Search & Add -->
+    <div class="search-add-bar">
+        <form th:action="@{/pigs}" method="get" class="d-flex">
+            <input type="text" name="keyword" placeholder="Tìm kiếm theo tên"
+                   th:value="${keyword}" class="form-control me-2">
+            <button type="submit" class="btn btn-outline-primary">Tìm</button>
+        </form>
+        <a th:href="@{/pigs/create}" class="btn btn-success">+ Thêm heo</a>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center align-middle">
+            <thead class="table-dark">
+            <tr>
+                <th>STT</th>
+                <th>Mã số heo</th>
+                <th>Ngày nhập</th>
+                <th>Trọng lượng khi nhập</th>
+                <th>Ngày xuất</th>
+                <th>Trọng lượng khi xuất</th>
+                <th>Xuất xứ</th>
+                <th>Hoạt động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pig,status : ${pigs}">
+                <td th:text="${status.count}"></td>
+                <td th:text="${pig.id}"></td>
+                <td th:text="${pig.timeIn}"></td>
+                <td th:text="${pig.weightIn}"></td>
+                <td th:text="${pig.timeOut}"></td>
+                <td th:text="${pig.weightOut}"></td>
+                <td th:text="${pig.country.name}"></td>
+                <td>
+                    <a th:href="@{'/pigs/'+ ${pig.id}+'/detail'}" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a th:href="@{'/pigs/'+ ${pig.id}+'/edit'}" class="btn btn-warning btn-sm">Sửa</a>
+                    <button class="btn btn-danger btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal"
+                            th:attr="data-id=${pig.id},data-title=${pig.id}">
+                        Xoá
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--phan trang-->
+<nav aria-label="Pagination" class="mt-4">
+    <ul class="pagination justify-content-center">
+        <!-- Nút Previous -->
+        <li class="page-item" th:classappend="${!pigs.hasPrevious()} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/pigs(page=${pigs.number - 1},keyword=${keyword},sort=${sort})}"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <!-- Các số trang -->
+        <li class="page-item"
+            th:each="i : ${#numbers.sequence(0, pigs.totalPages - 1)}"
+            th:classappend="${i == pigs.number} ? 'active'">
+            <a class="page-link"
+               th:href="@{/pigs(page=${i},keyword=${keyword},sort=${sort}) }"
+               th:text="${i + 1}">1</a>
+        </li>
+
+        <!-- Nút Next -->
+        <li class="page-item" th:classappend="${!pigs.hasNext()} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/pigs(page=${pigs.number + 1},keyword=${keyword},sort=${sort})}"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Xác nhận xoá</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc muốn xoá heo <strong id="modalTitle"></strong> không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                <form id="deleteForm" method="post">
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const showToast = (id) => {
+            const toastEl = document.getElementById(id);
+            if (!toastEl) return;
+            bootstrap.Toast.getOrCreateInstance(toastEl).show();
+        };
+        showToast('successToast');
+        showToast('errorToast');
+
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const Id = button.getAttribute('data-id');
+            const Title = button.getAttribute('data-title');
+            document.getElementById('modalTitle').textContent = Title;
+            document.getElementById('deleteForm').setAttribute('action', '/pigs/' + Id + '/delete');
+        });
+    });
+</script>
+</body>
+</html>

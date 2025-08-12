@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm mới heo</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white text-center">
+            <h4>Thêm mới heo</h4>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/pigs/save}" th:object="${pig}" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Ngày nhập</label>
+                    <input type="date" th:field="*{timeIn}" class="form-control" >
+                    <div class="text-danger small" th:if="${#fields.hasErrors('timeIn')}" th:errors="*{timeIn}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Trọng lượng nhập (kg)</label>
+                    <input type="number" step="0.1" th:field="*{weightIn}" class="form-control" >
+                    <div class="text-danger small" th:if="${#fields.hasErrors('weightIn')}" th:errors="*{weightIn}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Ngày xuất</label>
+                    <input type="date" th:field="*{timeOut}" class="form-control" >
+                    <div class="text-danger small" th:if="${#fields.hasErrors('timeOut')}" th:errors="*{timeOut}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Trọng lượng xuất (kg)</label>
+                    <input type="number" step="0.1" th:field="*{weightOut}" class="form-control" >
+                    <div class="text-danger small" th:if="${#fields.hasErrors('weightOut')}" th:errors="*{weightOut}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Xuất xứ</label>
+                    <select th:field="*{country}" class="form-select" >
+                        <option value="">-- Chọn quốc gia --</option>
+                        <option th:each="temp : ${countryList}"
+                                th:text="${temp.name}"
+                                th:value="${temp.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success px-4">💾 Lưu</button>
+                    <a href="/pigs" class="btn btn-secondary px-4">⬅ Quay lại</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
